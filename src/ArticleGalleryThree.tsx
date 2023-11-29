@@ -1,6 +1,6 @@
 import { Canvas, PrimitiveProps, useLoader } from "@react-three/fiber";
 import styles from "./ArticleGalleryThree.module.scss";
-// import * as THREE from "three";
+import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Float, PerspectiveCamera } from "@react-three/drei";
 
@@ -13,6 +13,12 @@ function Suzanne(props:Partial<PrimitiveProps>) {
       object:gltf.scene.clone()
     }
   );
+  merged.object.traverse((object3d)=>{
+    if(object3d instanceof THREE.Mesh){
+      object3d.castShadow=true;
+      object3d.receiveShadow=true;
+    }
+  })
   
   return (
     <primitive {...merged}/>
@@ -25,19 +31,19 @@ export default function ArticleGalleryThree() {
   return (
     <article className={styles["component"]}>
       <div className={styles["component__view-wrapper"]}>
-        <Canvas className={styles["component__view"]}>
-          <PerspectiveCamera makeDefault position={[0,0,5]} fov={30} />
-          <ambientLight intensity={0.3} />
-          <directionalLight position={[0, 0, 5]} />
-          {/* <mesh>
-            <boxGeometry args={[2,2,2]} />
-            <meshStandardMaterial color={new THREE.Color(0xff00ff)} />
-          </mesh> */}
+        <Canvas className={styles["component__view"]} shadows={true}>
+          <PerspectiveCamera makeDefault position={[0,1,5]} fov={30} />
+          <ambientLight intensity={0.6} />
+          <directionalLight intensity={1.0} position={[0, 3, 5]} castShadow={true}/>
+          <mesh position={[0,1.5,0]} receiveShadow={true}>
+            <boxGeometry args={[4,3,6]}  />
+            <meshStandardMaterial roughness={0.2} metalness={0} side={THREE.BackSide} />
+          </mesh>
           <Float>
-            <Suzanne position={[-1,0,-2]}/>
+            <Suzanne position={[-1,1.5,-2]}/>
           </Float>
           <Float>
-            <Suzanne position={[1,0,0]}/>
+            <Suzanne position={[1,1.5,0]}/>
           </Float>
           {/* <OrbitControls position={[0,0,2]} target={[0,0,0]}/> */}
           {/* <Stats/> */}
