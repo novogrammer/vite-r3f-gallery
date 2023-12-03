@@ -16,7 +16,6 @@ function Suzanne(props:Partial<PrimitiveProps>) {
   merged.object.traverse((object3d)=>{
     if(object3d instanceof THREE.Mesh){
       object3d.castShadow=true;
-      object3d.receiveShadow=true;
     }
   })
   
